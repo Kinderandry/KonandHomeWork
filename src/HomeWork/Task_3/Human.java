@@ -1,13 +1,12 @@
 package HomeWork.Task_3;
 
-import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.abs;
 
 public class Human {
     boolean sex;
-    String firstName;
+    private String firstName;
     String lastName;
     double height;
     double weight;
@@ -23,7 +22,7 @@ public class Human {
                 '}';
     }
 
-    public Human(boolean sex, String firstName, String lastName, double height, double weight) {
+    Human(boolean sex, String firstName, String lastName, double height, double weight) {
         this.sex = sex;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,11 +30,11 @@ public class Human {
         this.weight = weight;
     }
 
-    private static boolean probability(int bound) {
+    static boolean probability(int bound) {
         return ThreadLocalRandom.current().nextInt(100) < bound;
     }
 
-    public static boolean talk(Human human1, Human human2) {
+    private static boolean talk(Human human1, Human human2) {
         boolean sex1 = human1.sex;
         boolean sex2 = human2.sex;
         boolean conversation = false;
@@ -48,7 +47,7 @@ public class Human {
         return conversation;
     }
 
-    public static boolean society(Human human1, Human human2) {
+    private static boolean society(Human human1, Human human2) {
         boolean sex1 = human1.sex;
         boolean sex2 = human2.sex;
         boolean society;
@@ -61,7 +60,7 @@ public class Human {
         return society;
     }
 
-    public static boolean spendTimeTogether(Human human1, Human human2) {
+    private static boolean spendTimeTogether(Human human1, Human human2) {
         double height1 = human1.height;
         double height2 = human2.height;
         // | (a — b) / [ (a + b) / 2 ] | * 100 %
@@ -76,38 +75,15 @@ public class Human {
         return spendTime;
     }
 
-    public static Human bornHuman(Human human1, Human human2) {
-        boolean sex = probability(50);
-        String lastName;
-        double height = 0;
-        double weight = 0;
-        Scanner sc = new Scanner(System.in);
-        String firstName = sc.nextLine();
-
-        if (human1.sex) {
-            lastName = human1.lastName;
-        } else {
-            lastName = human2.lastName;
-        }
-
-        if (sex == human1.sex) {
-            height = human1.height + 0.1 * (human2.height - human1.height);
-            weight = human1.weight + 0.1 * (human2.weight - human1.weight);
-        }
-        Human baby = new Human(sex, firstName, lastName, height, weight);
-        System.out.println(baby.toString());
-        return baby;
-    }
-
-    public static Human relationship(Human human1, Human human2) {
-        if (talk(human1, human2) && society(human1, human2) && spendTimeTogether(human1, human2)) {
-            if (human1.sex != human2.sex) {
+    Human relationship(Human couple) {
+        if (talk(this, couple) && society(this, couple) && spendTimeTogether(this, couple)) {
+            if (this.sex != couple.sex) {
                 System.out.println("New Human is born");
                 System.out.println("Name your baby:");
-                if (!human1.sex) {
-                    return human1.bornHuman(human1, human2);
+                if (!this.sex) {
+                    return Woman.bornHuman(this, couple);
                 } else {
-                    return human2.bornHuman(human1, human2);
+                    return Woman.bornHuman(this, couple);
                 }
             } else {
                 System.out.println("Oops");
